@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, Link } from "react-router-dom"; // Import Link for routing
+import { axiosInstance } from "../api/axiosInstance";
 
 const DepartmentDashboard = () => {
   const [userData, setUserData] = useState({});
@@ -16,7 +17,7 @@ const DepartmentDashboard = () => {
 
     const fetchDetails = async () => {
       try {
-        const response = await axios.post(
+        const response = await axiosInstance.post(
           "/api/Staff/verifyUser",
           {
             token: savedToken.token,
@@ -30,7 +31,7 @@ const DepartmentDashboard = () => {
         const userId = response.data.user._id;
 
         if (userId) {
-          const userDetailsResponse = await axios.get(
+          const userDetailsResponse = await axiosInstance.get(
             `/api/user/${userId}`
           );
           setUserData(userDetailsResponse.data.user);
@@ -61,8 +62,7 @@ const DepartmentDashboard = () => {
       return;
     }
 
-    axios
-      .put(
+    axiosInstance.put(
         `/api/user/update/${userData._id}`,
         { status },
         {

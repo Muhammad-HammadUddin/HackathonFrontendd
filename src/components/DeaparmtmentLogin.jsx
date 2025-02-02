@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { axiosInstance } from '../api/axiosInstance';  // Import axiosInstance
 
 const DepartmentStaffLogin = () => {
   const [Name, setName] = useState('');
@@ -23,9 +23,9 @@ const DepartmentStaffLogin = () => {
     setError('');  // Clear any existing errors
 
     try {
-      // Send POST request with name, password, and role to the backend
-      const response = await axios.post(
-        '/api/Staff/Department-Staff',
+      // Send POST request with name, password, and role to the backend using axiosInstance
+      const response = await axiosInstance.post(
+        '/api/Staff/Department-Staff', // API endpoint
         { Name, Password, Role },
         {
           withCredentials: true, // Important to allow cookies to be sent/received
@@ -34,8 +34,8 @@ const DepartmentStaffLogin = () => {
 
       // Backend should return success response if verified
       if (response.status === 200) {
-      
-        navigate('/department'); 
+        // Successfully verified, redirect to department page
+        navigate('/department');
       }
     } catch (err) {
       console.error(err.response ? err.response.data : err);
@@ -120,7 +120,7 @@ const DepartmentStaffLogin = () => {
           </div>
         </form>
 
-       
+        {/* Go Back Home Link */}
         <div className="mt-4 text-center">
           <Link to="/" className="text-sm text-green-600 hover:text-green-700">
             Go back home

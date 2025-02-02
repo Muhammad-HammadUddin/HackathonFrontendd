@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { axiosInstance } from '../api/axiosInstance.js'; // Import your axiosInstance
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -22,9 +22,9 @@ const AdminLogin = () => {
     setError('');  // Clear any existing errors
 
     try {
-      // Send POST request with email and password to the backend
-      const response = await axios.post(
-        '/api/auth/login',
+      // Send POST request with email and password to the backend using axiosInstance
+      const response = await axiosInstance.post(
+        '/api/auth/login',  // This is the API endpoint
         { email, password },
         {
           withCredentials: true, // Important to allow cookies to be sent/received

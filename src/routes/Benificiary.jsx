@@ -2,7 +2,8 @@ import { Sidebar } from "../components/Sider.jsx";
 import { RxCross2 } from "react-icons/rx";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
+import { axiosInstance } from "../api/axiosInstance.js";
 
 export default function BeneficiariesPage() {
   const [beneficiaries, setBeneficiaries] = useState([]);
@@ -14,7 +15,7 @@ export default function BeneficiariesPage() {
   // Fetch all beneficiaries initially
   const fetchBeneficiaries = () => {
     const endpoint = `/api/user`;
-    axios.get(endpoint,{
+    axiosInstance.get(endpoint,{
       withCredentials: true, // This allows credentials (cookies) to be sent with the request
 
     })
@@ -42,7 +43,7 @@ export default function BeneficiariesPage() {
 
   const confirmDelete = () => {
     if (beneficiaryToDelete) {
-      axios.delete(`/api/user/${beneficiaryToDelete._id}`)
+      axiosInstance.delete(`/api/user/${beneficiaryToDelete._id}`)
         .then(() => {
           fetchBeneficiaries(); // Re-fetch beneficiaries after deletion
           setIsDeleteModalOpen(false); // Close the delete confirmation modal
@@ -73,7 +74,7 @@ export default function BeneficiariesPage() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    axios.put(`/api/user/${editBeneficiary._id}`, editBeneficiary,{
+    axiosInstance.put(`/api/user/${editBeneficiary._id}`, editBeneficiary,{
      
     })
       .then(() => {

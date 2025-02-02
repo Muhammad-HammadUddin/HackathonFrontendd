@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Sidebar } from "./Sider.jsx";
 import axios from "axios";
-import { PieChart } from "@mui/x-charts/PieChart"; // Pie Chart for Purpose and Status
+import { PieChart } from "@mui/x-charts/PieChart";
+import { axiosInstance } from "../api/axiosInstance.js";
+// Pie Chart for Purpose and Status
 
 export function AdminDashboard() {
   const [userData, setUserData] = useState([]);
@@ -30,18 +32,18 @@ export function AdminDashboard() {
   const FetchDetails = async () => {
     console.log("Fetching Details");
     try {
-      const response = await axios.get("/api/user", {
+      const response = await axiosInstance.get("/api/user", { // Use axiosInstance instead of axios
         withCredentials: true, // Include credentials (cookies, etc.)
       });
       const data = response.data;
       setUserData(data);
-
+  
       // Processing purpose data for Pie chart
       const purposeCounts = data.reduce((acc, user) => {
         acc[user.purpose] = (acc[user.purpose] || 0) + 1;
         return acc;
       }, {});
-
+  
       // Format the purpose data and assign colors
       const formattedPurposeData = Object.keys(purposeCounts).map((purpose) => ({
         label: purpose,
@@ -49,13 +51,13 @@ export function AdminDashboard() {
         color: purposeColors[purpose] || "#9E9E9E", // Assign color or default to grey
       }));
       setPurposeData(formattedPurposeData);
-
+  
       // Processing status data for Pie Chart
       const statusCounts = data.reduce((acc, user) => {
         acc[user.status] = (acc[user.status] || 0) + 1;
         return acc;
       }, {});
-
+  
       // Format the status data and assign colors
       const formattedStatusData = Object.keys(statusCounts).map((status) => ({
         label: status,
@@ -63,7 +65,7 @@ export function AdminDashboard() {
         color: statusColors[status] || "#9E9E9E", // Assign color or default to grey
       }));
       setStatusData(formattedStatusData);
-
+  
       // Processing user type data (New vs Returning)
       const userTypeCounts = data.reduce(
         (acc, user) => {
@@ -76,7 +78,7 @@ export function AdminDashboard() {
         },
         { New: 0, Returning: 0 }
       );
-
+  
       // Format the user type data and assign colors
       const formattedUserTypeData = [
         {
@@ -91,11 +93,12 @@ export function AdminDashboard() {
         },
       ];
       setUserTypeData(formattedUserTypeData);
-
+  
     } catch (error) {
       console.error("Error fetching details:", error);
     }
   };
+  
 
   useEffect(() => {
     FetchDetails();

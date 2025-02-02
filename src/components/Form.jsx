@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { axiosInstance } from "../api/axiosInstance";
 
 export default function Form() {
   const [formData, setFormData] = useState({
@@ -76,7 +77,7 @@ export default function Form() {
       };
 
       // Send the form data to the backend
-      const response = await axios.post("/api/user/form", updatedFormData);
+      const response = await axiosInstance.post("/api/user/form", updatedFormData);
       console.log("Form submitted successfully:", response.data);
 
       // Prepare the data to be saved in localStorage (including the token)
